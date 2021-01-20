@@ -1,13 +1,13 @@
 mod delete_message_builder;
 mod get_messages_builder;
 mod list_queues_builder;
+mod peek_messages_builder;
 mod put_message_builder;
 pub use delete_message_builder::DeleteMessageBuilder;
 pub use get_messages_builder::GetMessagesBuilder;
 pub use list_queues_builder::ListQueuesBuilder;
+pub use peek_messages_builder::PeekMessagesBuilder;
 pub use put_message_builder::PutMessageBuilder;
-//mod peek_messages_builder;
-//pub use peek_messages_builder::PeekMessagesBuilder;
 //mod clear_messages_builder;
 //pub use clear_messages_builder::ClearMessagesBuilder;
 //mod create_queue_builder;

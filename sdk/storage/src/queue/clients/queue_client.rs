@@ -46,6 +46,10 @@ impl QueueClient {
         PutMessageBuilder::new(self)
     }
 
+    pub fn peek(&self) -> PeekMessagesBuilder {
+        PeekMessagesBuilder::new(self)
+    }
+
     pub fn get(&self) -> GetMessagesBuilder {
         GetMessagesBuilder::new(self)
     }
