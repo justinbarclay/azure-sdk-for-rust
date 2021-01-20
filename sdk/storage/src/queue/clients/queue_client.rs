@@ -57,4 +57,8 @@ impl QueueClient {
     pub fn delete<'a>(&'a self, pop_receipt: &'a dyn PopReceipt) -> DeleteMessageBuilder {
         DeleteMessageBuilder::new(self, pop_receipt)
     }
+
+    pub fn clear(&self) -> ClearMessagesBuilder {
+        ClearMessagesBuilder::new(self)
+    }
 }
