@@ -2,6 +2,7 @@ use crate::clients::StorageClient;
 use crate::queue::prelude::*;
 use crate::queue::requests::*;
 use azure_core::Metadata;
+use std::borrow::Cow;
 use std::sync::Arc;
 
 pub trait AsQueueClient<QN: Into<String>> {
@@ -59,8 +60,8 @@ impl QueueClient {
     }
 
     /// Puts a message in the queue.
-    pub fn put_message(&self) -> PutMessageBuilder {
-        PutMessageBuilder::new(self)
+    pub fn put_message<'a>(&'a self, body: impl Into<Cow<'a, str>>) -> PutMessageBuilder {
+        PutMessageBuilder::new(self, body)
     }
 
     /// Peeks, without removing, one or more messages.
