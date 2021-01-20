@@ -3,7 +3,6 @@ use crate::queue::prelude::*;
 use crate::responses::*;
 use azure_core::headers::add_optional_header;
 use azure_core::prelude::*;
-use hyper::StatusCode;
 use std::convert::TryInto;
 
 #[derive(Debug, Clone)]
@@ -59,7 +58,7 @@ impl<'a> GetMessagesBuilder<'a> {
             .storage_client()
             .storage_account_client()
             .http_client()
-            .execute_request_check_status(request.0, StatusCode::OK)
+            .execute_request_check_status(request.0, http::status::StatusCode::OK)
             .await?;
 
         Ok((&response).try_into()?)

@@ -1,4 +1,5 @@
 use crate::clients::StorageClient;
+use crate::queue::prelude::*;
 use crate::queue::requests::*;
 use std::sync::Arc;
 
@@ -47,5 +48,9 @@ impl QueueClient {
 
     pub fn get(&self) -> GetMessagesBuilder {
         GetMessagesBuilder::new(self)
+    }
+
+    pub fn delete<'a>(&'a self, pop_receipt: &'a dyn PopReceipt) -> DeleteMessageBuilder {
+        DeleteMessageBuilder::new(self, pop_receipt)
     }
 }
