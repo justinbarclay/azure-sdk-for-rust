@@ -1,6 +1,7 @@
 use crate::clients::StorageClient;
 use crate::queue::prelude::*;
 use crate::queue::requests::*;
+use azure_core::Metadata;
 use std::sync::Arc;
 
 pub trait AsQueueClient<QN: Into<String>> {
@@ -42,27 +43,44 @@ impl QueueClient {
         &self.queue_name
     }
 
+    /// Creates the queue.
     pub fn create(&self) -> CreateQueueBuilder {
         CreateQueueBuilder::new(self)
     }
 
-    pub fn put(&self) -> PutMessageBuilder {
+    /// Deletes the queue.
+    pub fn delete(&self) -> DeleteQueueBuilder {
+        DeleteQueueBuilder::new(self)
+    }
+
+    /// Sets or clears the queue metadata.
+    pub fn set_metadata<'a>(&'a self, metadata: &'a Metadata) -> SetQueueMetadataBuilder {
+        SetQueueMetadataBuilder::new(self, metadata)
+    }
+
+    /// Puts a message in the queue.
+    pub fn put_message(&self) -> PutMessageBuilder {
         PutMessageBuilder::new(self)
     }
 
-    pub fn peek(&self) -> PeekMessagesBuilder {
+    /// Peeks, without removing, one or more messages.
+    pub fn peek_messages(&self) -> PeekMessagesBuilder {
         PeekMessagesBuilder::new(self)
     }
 
-    pub fn get(&self) -> GetMessagesBuilder {
+    /// Gets, shadowing them, one or more messages. In order to delete them, call [delete_message]
+    /// with the pop receipt before the shadow timeout expires.
+    pub fn get_messages(&self) -> GetMessagesBuilder {
         GetMessagesBuilder::new(self)
     }
 
-    pub fn delete<'a>(&'a self, pop_receipt: &'a dyn PopReceipt) -> DeleteMessageBuilder {
+    /// Deletes one or more previously shadowed messages.
+    pub fn delete_message<'a>(&'a self, pop_receipt: &'a dyn PopReceipt) -> DeleteMessageBuilder {
         DeleteMessageBuilder::new(self, pop_receipt)
     }
 
-    pub fn clear(&self) -> ClearMessagesBuilder {
+    /// Removes all messages from the queue.
+    pub fn clear_messages(&self) -> ClearMessagesBuilder {
         ClearMessagesBuilder::new(self)
     }
 }

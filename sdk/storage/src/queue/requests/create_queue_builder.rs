@@ -40,6 +40,7 @@ impl<'a> CreateQueueBuilder<'a> {
             &http::method::Method::PUT,
             &|mut request| {
                 request = add_optional_header(&self.client_request_id, request);
+                request = add_optional_header(&self.metadata, request);
                 request
             },
             None,
