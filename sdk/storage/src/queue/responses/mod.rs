@@ -1,3 +1,5 @@
+mod get_queue_service_properties_response;
+pub use get_queue_service_properties_response::GetQueueServicePropertiesResponse;
 mod set_queue_metadata_response;
 pub use set_queue_metadata_response::SetQueueMetadataResponse;
 mod list_queues_response;

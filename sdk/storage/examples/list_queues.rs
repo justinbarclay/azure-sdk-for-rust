@@ -22,6 +22,13 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         StorageAccountClient::new_access_key(http_client.clone(), &account, &master_key);
     let storage_client = storage_account_client.as_storage_client();
 
+    trace!("getting service properties");
+    let response = storage_client
+        .get_queue_service_properties()
+        .execute()
+        .await?;
+    println!("get_queue_service_properties.response == {:#?}", response);
+
     trace!("enumerating queues");
 
     let response = storage_client
