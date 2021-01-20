@@ -2,7 +2,6 @@ use crate::queue::*;
 use crate::responses::*;
 use azure_core::headers::add_optional_header;
 use azure_core::prelude::*;
-use hyper::StatusCode;
 use std::borrow::Cow;
 use std::convert::TryInto;
 
@@ -44,7 +43,7 @@ impl<'a> PutMessageBuilder<'a> {
         self.ttl.append_to_url_query(&mut url);
         self.timeout.append_to_url_query(&mut url);
 
-        debug!("url == {:?}", url);
+        trace!("url == {}", url.as_str());
 
         // since the format is fixed we just decorate the message with the tags.
         // This could be made optional in the future and/or more
@@ -71,7 +70,7 @@ impl<'a> PutMessageBuilder<'a> {
             .storage_client()
             .storage_account_client()
             .http_client()
-            .execute_request_check_status(request.0, StatusCode::CREATED)
+            .execute_request_check_status(request.0, http::status::StatusCode::CREATED)
             .await?;
 
         Ok((&response).try_into()?)

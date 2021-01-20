@@ -33,14 +33,14 @@ impl<'a> DeleteMessageBuilder<'a> {
         let mut url = self
             .queue_client
             .queue_url()?
-            .join("messages")?
+            .join("messages/")?
             .join(self.pop_receipt.message_id())?;
 
         url.query_pairs_mut()
             .append_pair("popreceipt", self.pop_receipt.pop_receipt());
         self.timeout.append_to_url_query(&mut url);
 
-        debug!("url == {}", url);
+        debug!("url == {}", url.as_str());
 
         let request = self.queue_client.storage_client().prepare_request(
             url.as_str(),

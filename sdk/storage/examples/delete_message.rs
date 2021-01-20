@@ -40,7 +40,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         trace!("no message to delete");
     } else {
         for message in get_response.messages {
-            trace!("deleting message {}", message.message_id);
+            trace!("deleting messages {}", message.message_id);
 
             let delete_response = queue.delete_message(&message).execute().await?;
 
