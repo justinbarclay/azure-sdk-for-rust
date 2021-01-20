@@ -1,9 +1,9 @@
-mod put_message_builder;
-pub use put_message_builder::PutMessageBuilder;
+mod get_messages_builder;
 mod list_queues_builder;
+mod put_message_builder;
+pub use get_messages_builder::GetMessagesBuilder;
 pub use list_queues_builder::ListQueuesBuilder;
-//mod get_messages_builder;
-//pub use get_messages_builder::GetMessagesBuilder;
+pub use put_message_builder::PutMessageBuilder;
 //mod delete_message_builder;
 //pub use delete_message_builder::DeleteMessageBuilder;
 //mod peek_messages_builder;

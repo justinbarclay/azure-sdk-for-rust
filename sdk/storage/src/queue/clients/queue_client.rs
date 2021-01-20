@@ -44,4 +44,8 @@ impl QueueClient {
     pub fn put(&self) -> PutMessageBuilder {
         PutMessageBuilder::new(self)
     }
+
+    pub fn get(&self) -> GetMessagesBuilder {
+        GetMessagesBuilder::new(self)
+    }
 }
