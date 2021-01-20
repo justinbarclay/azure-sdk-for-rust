@@ -42,6 +42,10 @@ impl QueueClient {
         &self.queue_name
     }
 
+    pub fn create(&self) -> CreateQueueBuilder {
+        CreateQueueBuilder::new(self)
+    }
+
     pub fn put(&self) -> PutMessageBuilder {
         PutMessageBuilder::new(self)
     }
