@@ -1,6 +1,3 @@
-#[macro_use]
-extern crate log;
-
 use azure_core::prelude::*;
 use azure_storage::core::prelude::*;
 use futures::stream::StreamExt;
