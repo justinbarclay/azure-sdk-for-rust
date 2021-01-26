@@ -7,16 +7,14 @@ use std::convert::TryInto;
 #[derive(Debug)]
 pub struct DeleteMessageBuilder<'a> {
     queue_client: &'a QueueClient,
-    pop_receipt: &'a dyn PopReceipt,
     timeout: Option<Timeout>,
     client_request_id: Option<ClientRequestId<'a>>,
 }
 
 impl<'a> DeleteMessageBuilder<'a> {
-    pub(crate) fn new(queue_client: &'a QueueClient, pop_receipt: &'a dyn PopReceipt) -> Self {
+    pub(crate) fn new(queue_client: &'a QueueClient) -> Self {
         DeleteMessageBuilder {
             queue_client,
-            pop_receipt,
             timeout: None,
             client_request_id: None,
         }
@@ -29,15 +27,16 @@ impl<'a> DeleteMessageBuilder<'a> {
 
     pub async fn execute(
         &self,
+        pop_receipt: &dyn PopReceipt,
     ) -> Result<DeleteMessageResponse, Box<dyn std::error::Error + Sync + Send>> {
         let mut url = self
             .queue_client
             .queue_url()?
             .join("messages/")?
-            .join(self.pop_receipt.message_id())?;
+            .join(pop_receipt.message_id())?;
 
         url.query_pairs_mut()
-            .append_pair("popreceipt", self.pop_receipt.pop_receipt());
+            .append_pair("popreceipt", pop_receipt.pop_receipt());
         self.timeout.append_to_url_query(&mut url);
 
         debug!("url == {}", url.as_str());

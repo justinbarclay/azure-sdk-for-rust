@@ -1,8 +1,5 @@
 use crate::clients::StorageClient;
-use crate::queue::prelude::*;
 use crate::queue::requests::*;
-use azure_core::Metadata;
-use std::borrow::Cow;
 use std::sync::Arc;
 
 pub trait AsQueueClient<QN: Into<String>> {
@@ -54,14 +51,21 @@ impl QueueClient {
         DeleteQueueBuilder::new(self)
     }
 
-    /// Sets or clears the queue metadata.
-    pub fn set_metadata<'a>(&'a self, metadata: &'a Metadata) -> SetQueueMetadataBuilder {
-        SetQueueMetadataBuilder::new(self, metadata)
+    /// Sets or clears the queue metadata. The metadata
+    /// will be passed to the `execute` function of the returned struct.
+    pub fn set_metadata(&self) -> SetQueueMetadataBuilder {
+        SetQueueMetadataBuilder::new(self)
     }
 
-    /// Puts a message in the queue.
-    pub fn put_message<'a>(&'a self, body: impl Into<Cow<'a, str>>) -> PutMessageBuilder {
-        PutMessageBuilder::new(self, body)
+    /// Get the queue metadata.
+    pub fn get_metadata(&self) -> GetQueueMetadataBuilder {
+        GetQueueMetadataBuilder::new(self)
+    }
+
+    /// Puts a message in the queue. The body will be passed
+    /// to the `execute` function of the returned struct.
+    pub fn put_message(&self) -> PutMessageBuilder {
+        PutMessageBuilder::new(self)
     }
 
     /// Peeks, without removing, one or more messages.
@@ -76,8 +80,10 @@ impl QueueClient {
     }
 
     /// Deletes one or more previously shadowed messages.
-    pub fn delete_message<'a>(&'a self, pop_receipt: &'a dyn PopReceipt) -> DeleteMessageBuilder {
-        DeleteMessageBuilder::new(self, pop_receipt)
+    /// The PopReceipt will be passed
+    /// to the `execute` function of the returned struct.
+    pub fn delete_message(&self) -> DeleteMessageBuilder {
+        DeleteMessageBuilder::new(self)
     }
 
     /// Removes all messages from the queue.
