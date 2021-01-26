@@ -62,6 +62,21 @@ impl QueueClient {
         GetQueueMetadataBuilder::new(self)
     }
 
+    /// Get the queue ACL. This call returns
+    /// all the stored access policies associated
+    /// to the current queue.
+    pub fn get_acl(&self) -> GetQueueACLBuilder {
+        GetQueueACLBuilder::new(self)
+    }
+
+    /// Set the queue ACL. You can call this function
+    /// to change or remove already existing stored
+    /// access policies by modifying the list returned
+    /// by `get_acl`.
+    pub fn set_acl(&self) -> SetQueueACLBuilder {
+        SetQueueACLBuilder::new(self)
+    }
+
     /// Puts a message in the queue. The body will be passed
     /// to the `execute` function of the returned struct.
     pub fn put_message(&self) -> PutMessageBuilder {
