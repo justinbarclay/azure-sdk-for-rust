@@ -29,13 +29,8 @@ impl<'a> GetQueueMetadataBuilder<'a> {
 
     pub async fn execute(
         &self,
-    ) -> Result<GetQueueServiceStatsResponse, Box<dyn std::error::Error + Sync + Send>> {
-        let mut url = self
-            .queue_client
-            .storage_client()
-            .storage_account_client()
-            .queue_storage_url()
-            .to_owned();
+    ) -> Result<GetQueueMetadataResponse, Box<dyn std::error::Error + Sync + Send>> {
+        let mut url = self.queue_client.queue_url()?;
 
         url.query_pairs_mut().append_pair("comp", "metadata");
 

@@ -33,7 +33,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     let mut metadata = Metadata::new();
     metadata
         .as_mut()
-        .insert("source".into(), "azure-sdk-for-rust".into());
+        .insert("source".into(), "Azure SDK for Rust".into());
     metadata
         .as_mut()
         .insert("created".into(), format!("{:?}", chrono::Utc::now()).into());
@@ -47,7 +47,11 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
 
     println!("metadata == {:#?}", metadata);
 
-    let response = queue.set_metadata(&metadata).execute().await?;
+    let response = queue.set_metadata().execute(&metadata).await?;
+    println!("response == {:#?}", response);
+
+    // let's get back the metadata
+    let response = queue.get_metadata().execute().await?;
     println!("response == {:#?}", response);
 
     // now let's delete it

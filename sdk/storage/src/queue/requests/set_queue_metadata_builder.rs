@@ -1,6 +1,6 @@
 use crate::queue::clients::QueueClient;
 use crate::queue::responses::*;
-use azure_core::headers::add_optional_header;
+use azure_core::headers::{add_mandatory_header, add_optional_header};
 use azure_core::prelude::*;
 use std::convert::TryInto;
 
@@ -25,15 +25,17 @@ impl<'a> SetQueueMetadataBuilder<'a> {
         client_request_id: ClientRequestId<'a> => Some(client_request_id),
     }
 
-    /// This call sets the metadata if Some(_) or clears them if None.
+    /// This call sets the metadata.
     /// Keep in mind that keys present on Azure but not included in the passed
     /// metadata parameter will be deleted. If you want to keep the preexisting
     /// key-value pairs, retrieve them with GetMetadata first and
     /// then update/add to the received Metadata struct. Then pass the Metadata
     /// back to SetQueueMetadata.
+    /// If you just want to clear the metadata, just pass an empty Metadata
+    /// struct.
     pub async fn execute(
         &self,
-        metadata: Option<&'a Metadata>,
+        metadata: &Metadata,
     ) -> Result<SetQueueMetadataResponse, Box<dyn std::error::Error + Sync + Send>> {
         let mut url = self.queue_client.queue_url()?;
 
@@ -44,7 +46,7 @@ impl<'a> SetQueueMetadataBuilder<'a> {
             url.as_str(),
             &http::method::Method::PUT,
             &|mut request| {
-                request = add_optional_header(&metadata, request);
+                request = add_mandatory_header(&metadata, request);
                 request = add_optional_header(&self.client_request_id, request);
                 request
             },
